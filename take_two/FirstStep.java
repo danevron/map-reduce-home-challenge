@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class FiratStep {
+public class FirstStep {
 
 	/*
 	input:
@@ -28,7 +28,7 @@ public class FiratStep {
 		search	[google]
 		photos	[facebook, youtube]
 	*/
-	public static class FiratStepMapper extends
+	public static class FirstStepMapper extends
 	Mapper<Object, Text, Text, Text> {
 		public void map(Object key, Text value, Context context)
 		throws IOException, InterruptedException {
@@ -49,7 +49,7 @@ public class FiratStep {
 		google
 		facebook youtube
 	*/
-	public static class FiratStepReducer extends
+	public static class FirstStepReducer extends
 	Reducer<Text, Text, Text, NullWritable> {
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		throws IOException, InterruptedException {
@@ -60,19 +60,19 @@ public class FiratStep {
 				value += " ";
 			}
 
-			context.write(new Text(value), NullWritable.get());
+			context.write(new Text(value.substring(0, value.length() - 1)), NullWritable.get());
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "FiratStep");
-		job.setJarByClass(FiratStep.class);
-		job.setReducerClass(FiratStepReducer.class);
+		Job job = new Job(conf, "FirstStep");
+		job.setJarByClass(FirstStep.class);
+		job.setReducerClass(FirstStepReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 
-		MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, FiratStepMapper.class);
+		MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, FirstStepMapper.class);
 		Path outputPath = new Path(args[1]);
 
 		FileOutputFormat.setOutputPath(job, outputPath);
