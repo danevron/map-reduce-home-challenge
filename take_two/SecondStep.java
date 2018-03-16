@@ -42,12 +42,12 @@ public class SecondStep {
 			List<String> sites = new ArrayList<String>(Arrays.asList(value.toString().split(" ")));
 			List<String> passedSites = new ArrayList<String>();
 
-			for (String t : sites) {
-				for (String previous : passedSites) {
-					context.write(new Text(previous + ":" + t), one);
-					context.write(new Text(t + ":" + previous), one);
+			for (String site : sites) {
+				for (String previousSite : passedSites) {
+					context.write(new Text(previousSite + ":" + site), one);
+					context.write(new Text(site + ":" + previousSite), one);
 				}
-				passedSites.add(t);
+				passedSites.add(site);
 			}
 		}
 	}
