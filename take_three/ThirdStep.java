@@ -13,9 +13,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 public class ThirdStep {
 
@@ -79,17 +78,16 @@ public class ThirdStep {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "ThirdStep");
+		Job job = Job.getInstance(conf, "ThirdStep");
 		job.setJarByClass(ThirdStep.class);
 		job.setReducerClass(ThirdStepReducer.class);
+		job.setMapperClass(ThirdStepMapper.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 
-		MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, ThirdStepMapper.class);
-		Path outputPath = new Path(args[1]);
-
-		FileOutputFormat.setOutputPath(job, outputPath);
-		outputPath.getFileSystem(conf).delete(outputPath);
+		FileInputFormat.addInputPath(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
+
 	}
 }

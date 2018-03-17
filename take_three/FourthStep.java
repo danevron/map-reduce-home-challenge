@@ -17,9 +17,8 @@ import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 public class FourthStep {
 
@@ -144,9 +143,10 @@ public class FourthStep {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "FourthStep");
+		Job job = Job.getInstance(conf, "FourthStep");
 		job.setJarByClass(FourthStep.class);
 		job.setReducerClass(FourthStepReducer.class);
+		job.setMapperClass(FourthStepMapper.class);
 		job.setPartitionerClass(CustomPartitioner.class);
 		job.setSortComparatorClass(KeyComparator.class);
 		job.setGroupingComparatorClass(GroupComparator.class);
@@ -154,11 +154,8 @@ public class FourthStep {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 
-		MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, FourthStepMapper.class);
-		Path outputPath = new Path(args[1]);
-
-		FileOutputFormat.setOutputPath(job, outputPath);
-		outputPath.getFileSystem(conf).delete(outputPath);
+		FileInputFormat.addInputPath(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }

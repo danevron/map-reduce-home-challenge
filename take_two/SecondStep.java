@@ -12,9 +12,8 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 public class SecondStep {
 
@@ -85,17 +84,15 @@ public class SecondStep {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "SecondStep");
+		Job job = Job.getInstance(conf, "SecondStep");
 		job.setJarByClass(SecondStep.class);
 		job.setReducerClass(SecondStepReducer.class);
+		job.setMapperClass(SecondStepMapper.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 
-		MultipleInputs.addInputPath(job, new Path(args[0]),TextInputFormat.class, SecondStepMapper.class);
-		Path outputPath = new Path(args[1]);
-
-		FileOutputFormat.setOutputPath(job, outputPath);
-		outputPath.getFileSystem(conf).delete(outputPath);
+		FileInputFormat.addInputPath(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }
