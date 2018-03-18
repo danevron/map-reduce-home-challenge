@@ -1,10 +1,10 @@
 import java.io.IOException;
+import java.lang.StringBuilder;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.NullWritable;
-
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -52,14 +52,16 @@ public class FirstStep {
 	Reducer<Text, Text, Text, NullWritable> {
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		throws IOException, InterruptedException {
-			String value = "";
+			StringBuilder value = new StringBuilder();
 
+      String space = "";
 			for (Text t : values) {
-				value += t.toString();
-				value += " ";
+				value.append(space);
+				space = " ";
+				value.append(t.toString());
 			}
 
-			context.write(new Text(value.substring(0, value.length() - 1)), NullWritable.get());
+			context.write(new Text(value.toString()), NullWritable.get());
 		}
 	}
 
