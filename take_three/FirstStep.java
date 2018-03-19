@@ -23,9 +23,12 @@ public class FirstStep {
 		youtube	videos
 
 	output:
-		videos	[facebook, google, youtube]
-		search	[google]
-		photos	[facebook, youtube]
+		videos	facebook
+		videos	google
+		videos	youtube
+		search	google
+		photos	facebook
+		photos	youtube
 	*/
 	public static class FirstStepMapper extends
 	Mapper<Object, Text, Text, Text> {
@@ -39,14 +42,14 @@ public class FirstStep {
 
 	/*
 	input:
-		videos	[facebook, google, youtube]
+		photos	[youtube, facebook]
 		search	[google]
-		photos	[facebook, youtube]
+		videos	[facebook, google, youtube]
 
 	output:
-		facebook google youtube
+		youtube facebook
 		google
-		facebook youtube
+		facebook google youtube
 	*/
 	public static class FirstStepReducer extends
 	Reducer<Text, Text, Text, NullWritable> {

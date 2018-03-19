@@ -20,19 +20,23 @@ public class ThirdStep {
 
 	/*
 	input:
+		youtube:facebook	1
+		facebook:youtube	1
 		facebook:google	1
-		facebook:youtube	2
 		google:facebook	1
+		facebook:youtube	1
+		youtube:facebook	1
 		google:youtube	1
-		youtube:facebook	2
 		youtube:google	1
 
 	output:
+		youtube:facebook	1
+		facebook:youtube	1
 		facebook:google	1
-		facebook:youtube	2
 		google:facebook	1
+		facebook:youtube	1
+		youtube:facebook	1
 		google:youtube	1
-		youtube:facebook	2
 		youtube:google	1
 	*/
 	public static class ThirdStepMapper extends
@@ -52,7 +56,10 @@ public class ThirdStep {
 	input:
 		facebook:google	[1]
 		facebook:youtube	[1, 1]
+		google:facebook	[1]
 		google:youtube	[1]
+		youtube:facebook	[1, 1]
+		youtube:google	[1]
 
 	output:
 		facebook:google:1	null
@@ -88,6 +95,5 @@ public class ThirdStep {
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
-
 	}
 }

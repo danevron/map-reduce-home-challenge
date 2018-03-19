@@ -33,12 +33,15 @@ public class FourthStep {
 			Text t2 = (Text) w2;
 			String[] t1Items = t1.toString().split(":");
 			String[] t2Items = t2.toString().split(":");
-			String t1Base = t1Items[0];
-			String t2Base = t2Items[0];
-			int comp = t1Base.compareTo(t2Base);
+			String naturalKey1 = t1Items[0];
+			String naturalKey2 = t2Items[0];
+			int comp = naturalKey1.compareTo(naturalKey2);
 
 			if (comp == 0) {
-				comp = -1 * Integer.compare(Integer.parseInt(t1Items[2]), Integer.parseInt(t2Items[2]));
+				int valueKey1 = Integer.parseInt(t1Items[1]);
+				int valueKey2 = Integer.parseInt(t2Items[1]);
+
+				comp = -1 * Integer.compare(valueKey1, valueKey2);
 			}
 			return comp;
 		}
@@ -55,9 +58,9 @@ public class FourthStep {
 
 			Text t1 = (Text) w1;
 			Text t2 = (Text) w2;
-			String t1Base = t1.toString().split(":")[0];
-			String t2Base = t2.toString().split(":")[0];
-			int comp = t1Base.compareTo(t2Base);
+			String naturalKey1 = t1.toString().split(":")[0];
+			String naturalKey2 = t2.toString().split(":")[0];
+			int comp = naturalKey1.compareTo(naturalKey2);
 
 			return comp;
 
@@ -76,20 +79,20 @@ public class FourthStep {
 
 	/*
 	input:
-	facebook:google:1
-	facebook:youtube:2
-	google:facebook:1
-	google:youtube:1
-	youtube:facebook:2
-	youtube:google:1
+		facebook:google:1	null
+		facebook:youtube:2 null
+		google:facebook:1	null
+		google:youtube:1	null
+		youtube:facebook:2	null
+		youtube:google:1	null
 
 	output:
-	facebook:google:1	google 1
-	facebook:youtube:2	youtube 2
-	google:facebook:1	facebook 1
-	google:youtube:1	youtube 1
-	youtube:facebook:2	facebook 2
-	youtube:google:1 google 1
+		facebook:1	google 1
+		facebook:2	youtube 2
+		google:1	facebook 1
+		google:1	youtube 1
+		youtube:2	facebook 2
+		youtube:1 google 1
 	*/
 	public static class FourthStepMapper extends
 	Mapper<LongWritable, Text, Text, Text> {
@@ -99,26 +102,23 @@ public class FourthStep {
 		throws IOException, InterruptedException {
 
 			String[] parts = value.toString().split(":");
-			context.write(value, new Text(parts[1] + " " + parts[2]));
+			context.write(new Text(parts[0] + ":" + parts[2]), new Text(parts[1] + " " + parts[2]));
 		}
 	}
 
 	/*
 	input:
-	facebook:google:1	google 1
-	facebook:youtube:2	youtube 2
-	google:facebook:1	facebook 1
-	google:youtube:1	youtube 1
-	youtube:facebook:2	facebook 2
-	youtube:google:1 google 1
+		facebook:2	["youtube 2", "google 1"]
+		google:1	["facebook 1", "youtube 1"]
+		youtube:2	["facebook 2", "google 1"]
 
 	output:
-	facebook youtube 2
-	facebook google 1
-	google facebook 1
-	google youtube 1
-	youtube facebook 2
-	youtube google 1
+		facebook youtube 2
+		facebook google 1
+		google facebook 1
+		google youtube 1
+		youtube facebook 2
+		youtube google 1
 	*/
 	public static class FourthStepReducer extends
 	Reducer<Text, Text, Text, Text> {

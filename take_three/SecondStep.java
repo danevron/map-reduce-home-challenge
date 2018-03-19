@@ -18,14 +18,15 @@ public class SecondStep {
 
 	/*
 	input:
-		facebook google youtube
+		youtube facebook
 		google
-		facebook youtube
+		facebook google youtube
 
 	output:
-		facebook:google	[1]
-		facebook:youtube	[1, 1]
-		google:youtube	[1]
+		facebook:google	1
+		facebook:youtube	1
+		google:youtube	1
+		facebook:youtube	1
 	*/
 	public static class SecondStepMapper extends
 	Mapper<LongWritable, Text, Text, IntWritable> {
@@ -54,10 +55,10 @@ public class SecondStep {
 
 	output:
 		facebook:google	1
-		facebook:youtube	2
 		google:facebook	1
-		google:youtube	1
+		facebook:youtube	2
 		youtube:facebook	2
+		google:youtube	1
 		youtube:google	1
 	*/
 	public static class SecondStepReducer extends
