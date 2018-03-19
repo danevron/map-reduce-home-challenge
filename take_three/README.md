@@ -15,7 +15,7 @@ In a high level, it joins (self join) the sites according to tags, creates all p
 
 ## Run
 
-    hadoop jar FirstStep.jar FirstStep input2.tsv FirstStep && hadoop jar SecondStep.jar SecondStep FirstStep/part-r-00000 SecondStep && hadoop jar ThirdStep.jar ThirdStep SecondStep/part-r-00000 ThirdStep && hadoop jar FourthStep.jar FourthStep ThirdStep/part-r-00000 FourthStep
+    hadoop jar FirstStep.jar FirstStep input.tsv FirstStep && hadoop jar SecondStep.jar SecondStep FirstStep/part-r-00000 SecondStep && hadoop jar ThirdStep.jar ThirdStep SecondStep/part-r-00000 ThirdStep && hadoop jar FourthStep.jar FourthStep ThirdStep/part-r-00000 FourthStep
 
 Results will be placed in `FourthStep/part-r-00000`
 
