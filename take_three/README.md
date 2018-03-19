@@ -4,10 +4,10 @@ The solution consists of 4 Map Reduce jobs.
 
 In a high level, it joins (self join) the sites according to tags, creates all pairs of sites per tag, sums the pairs and sorts them with secondary sort.
 
-First job - Groups all sites per tag.
-Second job - Creates pairs of sites and partly sums them.
-Third job - Finishes to sum the pairs and prepare them for sorting.
-Fourth job - Performs the secondary sort and return the requested format.
+1. First job - Groups all sites per tag.
+2. Second job - Creates pairs of sites and partly sums them.
+3. Third job - Finishes to sum the pairs and prepare them for sorting.
+4. Fourth job - Performs the secondary sort and return the requested format.
 
 ## Compile
 
